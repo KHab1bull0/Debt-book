@@ -1,4 +1,4 @@
-import { getAll, getOneVarchar, insertMany } from "../services/universal.service.js";
+import { getAll, getOneVarchar, insertMany, putmany } from "../services/universal.service.js";
 import { debtvalid } from "../validation/dept.valid.js";
 
 
@@ -66,7 +66,7 @@ export const putOneDepts = async (req, res) => {
 
         const validData = await debtvalid(req.body);
 
-        
+        const updateinfo = await putmany('depts', )
 
     } catch (err) {
         console.log(err)

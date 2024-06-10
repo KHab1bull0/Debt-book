@@ -160,7 +160,6 @@ export const putmany = async (table, columns, newValue, where, whereElem) => {
         }
 
         const query = `UPDATE ${table} SET ${gencolumn}  WHERE ${where} = ${whereElem} RETURNING *;`
-        console.log(query)
         const res = await pool.query(query);
         return res.rows
 

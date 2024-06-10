@@ -1,6 +1,6 @@
 import otpGenerator from 'otp-generator'
 import bcrypt from 'bcrypt';
-import { deleteOneVarchar, getOneVarchar, insertMany, putOneVarchar } from "../services/universal.service.js";
+import { deleteOneVarchar, getOneVarchar, insertMany, putmany } from "../services/universal.service.js";
 import { sendOtptoEmail } from "../utils/email.js";
 import { hashPassword } from "../utils/hash.js";
 import { userValid } from "../validation/uservalid.js"
@@ -51,7 +51,7 @@ export const userRegister = async (req, res) => {
 export const userOtpVerify = async (req, res) => {
     try {
 
-        const validData = await otpValid(req.body);
+        const validData = await otpValidation(req.body);
 
         const userInfo = await getOneVarchar('otps', 'email', validData.email);
 
@@ -68,7 +68,7 @@ export const userOtpVerify = async (req, res) => {
         };
 
         await deleteOneVarchar('otps', 'email', validData.email);
-        await putOneVarchar('users', 'status', 'active', 'email', validData.email);
+        await putmany('users', ['status'], ['active'], 'email', validData.email);
 
         return res.status(200).send({
             message: "Foydalanuvchi tasdiqlandi!"
@@ -111,7 +111,7 @@ export const userLogin = async (req, res) => {
         if(!info.length){
             await insertMany('refreshTokens', ['email', 'token'], [user[0].email, refreshToken]);
         } else {
-            await putOneVarchar('refreshTokens', 'token', refreshToken, 'email', user[0].email);
+            await putmany('refreshTokens', ['token'], [refreshToken], 'email', user[0].email);
         }
 
         return res.status(200).send({
