@@ -14,6 +14,12 @@ export const userValid = async (body, type) => {
         password: Joi.string().min(3),
     });
 
+    const validSchema3 = Joi.object({
+        username: Joi.string().min(3).required(),
+        email: Joi.string().email().required(),
+        role: Joi.string().min(4).max(5)
+    });
+
     if(type == 'register'){
         const { error, value } = validSchema.validate(body);
 
@@ -25,8 +31,14 @@ export const userValid = async (body, type) => {
 
         if(error) throw error;
         return value;
+
+    } else if(type == 'admin'){
+        const { error, value } = validSchema3.validate(body)
         
-    } else {
+        if(error) throw error;
+        return value;
+
+    }else{
         throw new Error("Validatsiya type noto'g'ri");
     }
 

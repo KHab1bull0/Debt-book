@@ -114,7 +114,6 @@ export const putmany = async (table, columns, newValue, where, whereElem) => {
             for (let i = 0; i < arr.length; i++) {
                 let str = ''
                 let type = typeof arr[i];
-                console.log(type, arr[i])
                 if (type == 'string') {
 
                     for (let j = 0; j < arr[i].length; j++) {
@@ -150,18 +149,17 @@ export const putmany = async (table, columns, newValue, where, whereElem) => {
                 }
             }
             return str
-        }
+        };
+        
         const cleardata = filterData(newValue)
-        console.log('cleardata ->  ',cleardata);
         const gencolumn = generat(columns, cleardata);
-        console.log('gendata ->   ',gencolumn);
+
         if(typeof whereElem == 'string'){
             const filterwhere = filterData([whereElem])
             whereElem = `'${filterwhere}'`
         }
 
         const query = `UPDATE ${table} SET ${gencolumn}  WHERE ${where} = ${whereElem} RETURNING *;`
-        console.log(query);
 
         const res = await pool.query(query);
         return res.rows
