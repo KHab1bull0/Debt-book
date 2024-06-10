@@ -1,0 +1,1 @@
+const query = `UPDATE ${table} SET ${gencolumn}  WHERE ${where} = '${whereElem}' RETURNING *;`
