@@ -10,7 +10,8 @@ export const postDepts = async (req, res) => {
             [validData.amount, validData.description, validData.due_date, validData.status]);
 
         return res.status(201).send({
-            message: "Yangi qarz qo'shildi."
+            message: "Yangi qarz qo'shildi.",
+            data: insertinfo
         });
 
     } catch (err) {
@@ -63,10 +64,23 @@ export const getdepts = async (req, res) => {
 
 export const putOneDepts = async (req, res) => {
     try {
+        const { id } = req.params
+        if( !id){
+            return res.status(400).send({
+                message: "id is required"
+            })
+        }
 
         const validData = await debtvalid(req.body);
+        console.log(validData);
 
-        const updateinfo = await putmany('depts', )
+        const updateinfo = await putmany('depts', ['amount', 'description', 'due_date', 'status'],[validData.amount, validData.description, validData.due_date, validData.status], 
+        'id', id);
+
+        return res.status(200).send({
+            message: "Yangilandi...",
+            data: updateinfo
+        })
 
     } catch (err) {
         console.log(err)

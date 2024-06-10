@@ -5,7 +5,7 @@ export const debtvalid = async (body) => {
     const debtSchema = Joi.object({
         amount: Joi.number().required(),
         description: Joi.string().max(255).required(),
-        due_date: Joi.date().required(),
+        due_date: Joi.string().isoDate().required(),
         status: Joi.string().max(10).min(3).required()
     });
 
@@ -14,6 +14,5 @@ export const debtvalid = async (body) => {
     if(error){
         throw error;
     };
-
     return value;
 }
