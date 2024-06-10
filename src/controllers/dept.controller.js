@@ -1,4 +1,4 @@
-import { getAll, getOneVarchar, insertMany, putmany } from "../services/universal.service.js";
+import { deleteOneInt, getAll, getOneVarchar, insertMany, putmany } from "../services/universal.service.js";
 import { debtvalid } from "../validation/dept.valid.js";
 
 
@@ -65,7 +65,7 @@ export const getdepts = async (req, res) => {
 export const putOneDepts = async (req, res) => {
     try {
         const { id } = req.params
-        if( !id){
+        if (!id) {
             return res.status(400).send({
                 message: "id is required"
             })
@@ -74,13 +74,40 @@ export const putOneDepts = async (req, res) => {
         const validData = await debtvalid(req.body);
         console.log(validData);
 
-        const updateinfo = await putmany('depts', ['amount', 'description', 'due_date', 'status'],[validData.amount, validData.description, validData.due_date, validData.status], 
-        'id', id);
+        const updateinfo = await putmany('depts', ['amount', 'description', 'due_date', 'status'], [validData.amount, validData.description, validData.due_date, validData.status],
+            'id', id);
 
         return res.status(200).send({
             message: "Yangilandi...",
             data: updateinfo
         })
+
+    } catch (err) {
+        console.log(err)
+        return res.status(500).send({
+            error: err
+        });
+    };
+}
+
+export const deletedebt = async (req, res) => {
+    try {
+
+        const { id } = req.params;
+        if(!id){
+            return res.status(400).send({
+                message: "id is required"
+            });
+        };
+
+        const deleteinfo = await deleteOneInt('depts', 'id', id);
+
+        console.log(deleteinfo);
+        return res.status(200).send({
+            message: "O'chirildi...",
+            data: deleteinfo
+        })
+
 
     } catch (err) {
         console.log(err)
